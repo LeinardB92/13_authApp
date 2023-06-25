@@ -2,8 +2,10 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
+import { environment } from '../../../environments/environments';
 import { AuthStatus, User } from '../interfaces';
-import { environment } from 'src/environments/environments';
+
+
 
 @Injectable({
   providedIn: 'root'
