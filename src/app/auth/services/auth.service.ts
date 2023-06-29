@@ -1,9 +1,10 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 import { AuthStatus, LoginResponse, User } from '../interfaces';
 import { environment } from '../../../environments/environments';
+import { CheckTokenResponse } from '../interfaces/check-token.response';
 
 
 
@@ -48,5 +49,27 @@ export class AuthService {
       );
   }
 
+
+  checkAuthStatus():Observable<boolean> {
+
+    const url   = `${ this.baseUrl }/auth/check-token`;
+    const token = localStorage.getItem('token');
+
+    if ( !token ) {
+      // this.logout();
+      return of(false);
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${ token }`);
+
+      return this.http.get<CheckTokenResponse>(url, { headers })
+        .pipe(
+          map( ({ user, token }) => this.setAuthentication( user, token )),
+          catchError(() => {
+            this._authStatus.set( AuthStatus.notAuthenticated );
+            return of(false);
+          })
+        );
+  }
 
 }
