@@ -41,6 +41,7 @@ export class AuthService {
 
 
   login( email: string, password: string ): Observable<boolean> {
+
     const url  = `${ this.baseUrl }/auth/login`;
     const body = { email, password };
 
@@ -58,7 +59,7 @@ export class AuthService {
     const token = localStorage.getItem('token');
 
     if ( !token ) {
-      // this.logout();
+      this.logout();
       return of(false);
     }
 
