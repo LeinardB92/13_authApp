@@ -23,9 +23,11 @@ export class AuthService {
   public currentUser = computed( () => this._currentUser() );
   public authStatus = computed( () => this._authStatus() );
 
-  constructor() {
 
+  constructor() {
+    this.checkAuthStatus().subscribe();
   }
+
 
   private setAuthentication(user: User, token:string): boolean {
 
@@ -70,6 +72,13 @@ export class AuthService {
             return of(false);
           })
         );
+  }
+
+
+  logout() {
+    localStorage.removeItem('token');
+    this._currentUser.set(null);
+    this._authStatus.set( AuthStatus.notAuthenticated );
   }
 
 }
